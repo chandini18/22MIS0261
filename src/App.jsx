@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 const PRIORITY = { Placement: 3, Result: 2, Event: 1 };
-const TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJNYXBDbGFpbXMiOnsiYXVkIjoiaHR0cDovLzIwLjI0NC41Ni4xNDQvZXZhbHVhdGlvbi1zZXJ2aWNlIiwiZW1haWwiOiJjaGFuZGluaWowMTRAZ21haWwuY29tIiwiZXhwIjoxNzc4OTMxNzQ0LCJpYXQiOjE3Nzg5MzA4NDQsImlzcyI6IkFmZm9yZCBNZWRpY2FsIFRlY2hub2xvZ2llcyBQcml2YXRlIExpbWl0ZWQiLCJqdGkiOiJiMDgyZTZhYS02ZDc4LTQ1YjgtYTFmYy05Mjk3OTc0MzkyZDUiLCJsb2NhbGUiOiJlbi1JTiIsIm5hbWUiOiJjaGFuZGluaSBqIiwic3ViIjoiYjBhYTBlN2EtNGIxZC00Nzk4LThmNDAtN2FmYWI5NWNiYmJhIn0sImVtYWlsIjoiY2hhbmRpbmlqMDE0QGdtYWlsLmNvbSIsIm5hbWUiOiJjaGFuZGluaSBqIiwicm9sbE5vIjoiMjJtaXMwMjYxeCIsImFjY2Vzc0NvZGUiOiJTZkZ1V2ciLCJjbGllbnRJRCI6ImIwYWEwZTdhLTRiMWQtNDc5OC04ZjQwLTdhZmFiOTVjYmJiYSIsImNsaWVudFNlY3JldCI6IkRiZU1aWWh5RGZ5dHN5bWgifQ._KR_Fkzhj5NRBolFOXms1CrilD-65RgppqOnDGEUeoo";
+const TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJNYXBDbGFpbXMiOnsiYXVkIjoiaHR0cDovLzIwLjI0NC41Ni4xNDQvZXZhbHVhdGlvbi1zZXJ2aWNlIiwiZW1haWwiOiJjaGFuZGluaWowMTRAZ21haWwuY29tIiwiZXhwIjoxNzc4OTMzNzMxLCJpYXQiOjE3Nzg5MzI4MzEsImlzcyI6IkFmZm9yZCBNZWRpY2FsIFRlY2hub2xvZ2llcyBQcml2YXRlIExpbWl0ZWQiLCJqdGkiOiJkNTQ0YmM0MC1hNDQzLTRkZGEtODRkZS0yY2I5Y2ZlODM5ZWEiLCJsb2NhbGUiOiJlbi1JTiIsIm5hbWUiOiJjaGFuZGluaSBqIiwic3ViIjoiYjBhYTBlN2EtNGIxZC00Nzk4LThmNDAtN2FmYWI5NWNiYmJhIn0sImVtYWlsIjoiY2hhbmRpbmlqMDE0QGdtYWlsLmNvbSIsIm5hbWUiOiJjaGFuZGluaSBqIiwicm9sbE5vIjoiMjJtaXMwMjYxeCIsImFjY2Vzc0NvZGUiOiJTZkZ1V2ciLCJjbGllbnRJRCI6ImIwYWEwZTdhLTRiMWQtNDc5OC04ZjQwLTdhZmFiOTVjYmJiYSIsImNsaWVudFNlY3JldCI6IkRiZU1aWWh5RGZ5dHN5bWgifQ.eN1gcYgPnUj1fHJAkIUqJ7kzGMum31ULtA_SVvd9QmY";
 
 async function Log(stack, level, packageName, message) {
   try {
@@ -69,9 +69,8 @@ export default function App() {
 
   return (
     <div style={{ maxWidth: 800, margin: "0 auto", padding: 20, fontFamily: "sans-serif" }}>
-      <h1 style={{ textAlign: "center" }}>🔔 Campus Notification System</h1>
+      <h1 style={{ textAlign: "center" }}>Campus Notification System</h1>
 
-      {/* Filter Buttons */}
       <div style={{ marginBottom: 20, display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "center" }}>
         {["All", "Placement", "Result", "Event"].map(type => (
           <button
@@ -96,7 +95,6 @@ export default function App() {
       {error && <p style={{ color: "red", textAlign: "center" }}>{error}</p>}
       {!loading && notifications.length === 0 && <p style={{ textAlign: "center" }}>No notifications found.</p>}
 
-      {/* Notification Cards */}
       {filtered.slice(0, 10).map((n, i) => {
         const isViewed = viewed.includes(n.ID || i);
         return (
