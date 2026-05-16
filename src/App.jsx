@@ -1,18 +1,27 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 
 const PRIORITY = { Placement: 3, Result: 2, Event: 1 };
+const TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJNYXBDbGFpbXMiOnsiYXVkIjoiaHR0cDovLzIwLjI0NC41Ni4xNDQvZXZhbHVhdGlvbi1zZXJ2aWNlIiwiZW1haWwiOiJjaGFuZGluaWowMTRAZ21haWwuY29tIiwiZXhwIjoxNzc4OTMxNzQ0LCJpYXQiOjE3Nzg5MzA4NDQsImlzcyI6IkFmZm9yZCBNZWRpY2FsIFRlY2hub2xvZ2llcyBQcml2YXRlIExpbWl0ZWQiLCJqdGkiOiJiMDgyZTZhYS02ZDc4LTQ1YjgtYTFmYy05Mjk3OTc0MzkyZDUiLCJsb2NhbGUiOiJlbi1JTiIsIm5hbWUiOiJjaGFuZGluaSBqIiwic3ViIjoiYjBhYTBlN2EtNGIxZC00Nzk4LThmNDAtN2FmYWI5NWNiYmJhIn0sImVtYWlsIjoiY2hhbmRpbmlqMDE0QGdtYWlsLmNvbSIsIm5hbWUiOiJjaGFuZGluaSBqIiwicm9sbE5vIjoiMjJtaXMwMjYxeCIsImFjY2Vzc0NvZGUiOiJTZkZ1V2ciLCJjbGllbnRJRCI6ImIwYWEwZTdhLTRiMWQtNDc5OC04ZjQwLTdhZmFiOTVjYmJiYSIsImNsaWVudFNlY3JldCI6IkRiZU1aWWh5RGZ5dHN5bWgifQ._KR_Fkzhj5NRBolFOXms1CrilD-65RgppqOnDGEUeoo";
 
 export default function App() {
   const [notifications, setNotifications] = useState([]);
   const [filter, setFilter] = useState("All");
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    axios.get("http://4.224.186.213/evaluation-service/notifications")
-      .then(res => {
-        const data = res.data.data || res.data;
-        const sorted = data.sort((a, b) => {
+    fetch("http://4.224.186.213/evaluation-service/notifications", {
+      headers: {
+        Authorization: `Bearer ${TOKEN}`
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log("API Response:", data);
+        const list = Array.isArray(data) ? data :
+                     Array.isArray(data.data) ? data.data :
+                     Array.isArray(data.notifications) ? data.notifications : [];
+        const sorted = [...list].sort((a, b) => {
           if (PRIORITY[b.Type] !== PRIORITY[a.Type])
             return PRIORITY[b.Type] - PRIORITY[a.Type];
           return new Date(b.Timestamp) - new Date(a.Timestamp);
@@ -21,7 +30,7 @@ export default function App() {
         setLoading(false);
       })
       .catch(err => {
-        console.log(err);
+        setError("API Error: " + err.message);
         setLoading(false);
       });
   }, []);
@@ -32,9 +41,9 @@ export default function App() {
 
   return (
     <div style={{ maxWidth: 800, margin: "0 auto", padding: 20 }}>
-      <h1>Campus Notification System</h1>
+      <h1>🔔 Campus Notification System</h1>
 
-      <div style={{ marginBottom: 20, display: "flex", gap: 10 }}>
+      <div style={{ marginBottom: 20, display: "flex", gap: 10, flexWrap: "wrap" }}>
         {["All", "Placement", "Result", "Event"].map(type => (
           <button
             key={type}
@@ -53,8 +62,12 @@ export default function App() {
         ))}
       </div>
 
-      {loading ? <p>Loading...</p> : filtered.slice(0, 10).map(n => (
-        <div key={n.ID} style={{
+      {loading && <p>Loading notifications...</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      {!loading && notifications.length === 0 && <p>No notifications found.</p>}
+
+      {filtered.slice(0, 10).map((n, i) => (
+        <div key={n.ID || i} style={{
           border: "1px solid #ddd",
           borderRadius: 8,
           padding: 16,
